@@ -1,17 +1,21 @@
+<h1>STM32 NUCLEO-F446RE with gtest Integration</h1>
+
 This was developed in Ac6 System Workbench for STM32
 Instructions for installing this IDE can be found here:
 https://www.openstm32.org/Installing%2BSystem%2BWorkbench%2Bfor%2BSTM32%2Bfrom%2BEclipse
 
-To run all unit tests:
+<h3>To run all unit tests:</h3>
 
 1. Go to the debug folder (not ideal but works for now):
-cd {Project Workspace Location}/mySTM32ProjUt/Debug
-
+```
+cd {Project_Workspace_Location}/mySTM32ProjUt/Debug
+```
 2. Run the binary (Sample output at end of file):
+```
 ./mySTM32ProjUt
+```
 
-
-Development notes:
+<h3>Development notes:</h3>
 
 Started this project with the goal of using gtest and STM32 because I already have experience with gtest and I'm already beginning to work with STM32 so this was the most interesting platform.
 
@@ -21,10 +25,11 @@ After reviewing options it didn't seem practical to integrate the unit test on t
 
 Another reason is that unit testing on the embedded target will likely be bugging, slow and generally unreliable given the usual inconsistency of embedded hardware. The unit tests really just need to test the logic and the embedded target should be used to test the hardware/drivers. These functions can be and should be separated if possible to simplify and isolate troubleshooting.
 
-After some trial and error and research I found that the best solution seems to be along the lines of creating three projects:
-    1. The main embedded target project.
-    2. A static library project containing all non-embedded files that will be unit tested
-    3. The unit test project that will run on a desktop platform (I'm using Ubuntu 17.04 and x86)
+<h4>After some trial and error and research I found that the best solution seems to be along the lines of creating three projects:</h4>
+
+1. The main embedded target project.
+2. A static library project containing all non-embedded files that will be unit tested
+3. The unit test project that will run on a desktop platform (I'm using Ubuntu 17.04 and x86)
 
 First, I created the main embedded target project (shell project with a stub math function for testing).
 Then I created the googletest project.
@@ -41,9 +46,7 @@ Currently, the project builds and will generate a linux binary in the Debug fold
 
 All in all, this seems to be a good stopping point for a proof-of-concept but there can be several impovements made to make this more professional.
 
-Possible Improvements:
-
-If I continued with this there are several improvements that come to mind:
+<h3>Possible Improvements:</h3>
 
 1. Investigate using Unity. I'm not sure that using gtest is the best since it appears that we need to adapt the framework with helpers in order to test the C source. If Unity is all in C then testing could be implemented more clearly with this framework.
 2. Include stubbing of any hardware functionality that isn't unit-testable.
@@ -56,7 +59,7 @@ If I continued with this there are several improvements that come to mind:
 x. I'm sure there are others, let me know if you have any suggestions.
 
 
-
+```
 ---- SAMPLE OUTPUT -----
 
 [==========] Running 4 tests from 1 test suite.
@@ -122,3 +125,4 @@ Expected equality of these values:
 [  FAILED  ] myMath.mult_FAIL
 
  2 FAILED TESTS
+```
